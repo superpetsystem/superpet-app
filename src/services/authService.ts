@@ -26,6 +26,16 @@ export const authService = {
     return response.data;
   },
 
+  async refreshToken(data: RefreshTokenRequest): Promise<{ access_token: string }> {
+    const response = await api.post("/auth/refresh", data);
+    return response.data;
+  },
+
+  async logout(refreshToken: string): Promise<{ message: string }> {
+    const response = await api.post("/auth/logout", { refreshToken });
+    return response.data;
+  },
+
   async changePassword(data: ChangePasswordRequest): Promise<{ message: string }> {
     const response = await api.post("/auth/change-password", data);
     return response.data;
@@ -38,11 +48,6 @@ export const authService = {
 
   async resetPassword(data: ResetPasswordRequest): Promise<{ message: string }> {
     const response = await api.post("/auth/reset-password", data);
-    return response.data;
-  },
-
-  async refreshToken(data: RefreshTokenRequest): Promise<{ access_token: string }> {
-    const response = await api.post("/auth/refresh", data);
     return response.data;
   },
 };

@@ -322,9 +322,9 @@ export default function HomePage() {
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                 <Calendar className="w-4 h-4 text-primary-foreground" />
               </div>
-              <span className="font-bold text-primary">PetScheduler</span>
+              <span className="font-bold text-primary">Super Pet</span>
             </div>
-            <p className="text-sm text-muted-foreground">© 2025 PetScheduler. Todos os direitos reservados.</p>
+            <p className="text-sm text-muted-foreground">© 2025 Super Pet. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>

@@ -1,6 +1,6 @@
-# Super Pet Scheduling - React + Vite
+# Super Pet - React + Vite
 
-Sistema de agendamento para pet shops migrado de Next.js para React + Vite.
+Sistema de agendamento para pet shops com funcionalidades completas de autenticação, agendamento e gestão.
 
 ## 🚀 Tecnologias
 

@@ -35,17 +35,20 @@ src/
 
 ### 2. **Autenticação**
 - ✅ Login com email e senha
-- ✅ Registro de novos usuários
-- ✅ Obter perfil do usuário
+- ✅ Registro de novos usuários (cria Employee com role OWNER automaticamente)
+- ✅ Obter perfil do usuário (`/auth/me`)
 - ✅ Alterar senha
 - ✅ Recuperar senha (forgot/reset)
-- ✅ Refresh token
-- ✅ Logout
+- ✅ Refresh token automático (access_token 15min + refresh_token 7d)
+- ✅ Logout com blacklist de tokens
 
 ### 3. **Segurança**
-- Tokens JWT armazenados com segurança
+- Tokens JWT armazenados com segurança no localStorage
+- Access token com prefixo "Bearer " 
+- Refresh token automático quando access_token expira
 - Interceptores de requisição para adicionar token
-- Tratamento automático de tokens expirados
+- Tratamento automático de tokens expirados com fila de requisições
+- Logout automático quando refresh falha
 - Rotas protegidas
 
 ## 📝 Como Usar
@@ -115,28 +118,80 @@ VITE_API_BASE_URL=http://localhost:3000
 
 ### API Endpoints
 
-Todos os endpoints esperam o seguinte formato:
+Todos os endpoints esperam o seguinte formato conforme Postman Collection:
 
 ```typescript
-POST /auth/login
+// 1. Register - Cria usuário e employee automático
 POST /auth/register
+Body: { email: string, name: string, password: string }
+Response: { access_token: string, refresh_token: string, user: User }
+
+// 2. Login - Retorna tokens de acesso
+POST /auth/login
+Body: { email: string, password: string }
+Response: { access_token: string, refresh_token: string, user: User }
+
+// 3. Get Profile - Retorna dados do usuário autenticado
 GET /auth/me
-POST /auth/change-password
-POST /auth/forgot-password
-POST /auth/reset-password
+Headers: { Authorization: "Bearer {token}" }
+Response: User
+
+// 4. Refresh Token - Renova access_token
 POST /auth/refresh
+Body: { refreshToken: string }
+Response: { access_token: string }
+
+// 5. Logout - Blacklist tokens
+POST /auth/logout
+Headers: { Authorization: "Bearer {token}" }
+Body: { refreshToken: string }
+Response: { message: string }
+
+// 6. Change Password - Altera senha (requer autenticação)
+POST /auth/change-password
+Headers: { Authorization: "Bearer {token}" }
+Body: { currentPassword: string, newPassword: string }
+Response: { message: string }
+
+// 7. Forgot Password - Solicita token de reset
+POST /auth/forgot-password
+Body: { email: string }
+Response: { message: string, token?: string }
+
+// 8. Reset Password - Define nova senha com token
+POST /auth/reset-password
+Body: { token: string, newPassword: string }
+Response: { message: string }
 ```
+
+**Nota:** A API está rodando em `http://localhost:3000` por padrão.
 
 ## 📊 Estado Redux
 
 ```typescript
 interface AuthState {
   user: User | null
-  token: string | null
-  refreshToken: string | null
+  token: string | null          // Access token (sem "Bearer ")
+  refreshToken: string | null   // Refresh token
   isAuthenticated: boolean
   isLoading: boolean
   error: string | null
+  currentCompanyId: string | null
+}
+
+interface User {
+  id: string
+  email: string
+  name: string
+  organizationId?: string
+  status?: "ACTIVE" | "INACTIVE"
+  createdAt?: string
+}
+
+interface AuthResponse {
+  access_token: string      // JWT token (15 minutos)
+  refresh_token: string     // JWT token (7 dias)
+  user: User
 }
 ```
 
@@ -151,10 +206,16 @@ interface AuthState {
 
 ## 🔒 Segurança
 
-- Tokens são armazenados no `localStorage`
-- Todas as requisições incluem o token automaticamente
+- Tokens são armazenados no `localStorage` com prefixo "Bearer "
+- Access token com validade de 15 minutos
+- Refresh token com validade de 7 dias
+- Auto-refresh quando access token expira
+- Sistema de fila para múltiplas requisições durante refresh
+- Todas as requisições incluem o token automaticamente via interceptor
+- Logout faz blacklist de ambos os tokens no servidor
 - Tokens expirados resultam em logout automático
 - Rotas protegidas redirecionam para `/login` se não autenticado
+- Verificação de token ao inicializar app (getProfile)
 
 ## 📝 Notas
 

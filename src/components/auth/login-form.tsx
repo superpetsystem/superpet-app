@@ -3,13 +3,20 @@ import type React from "react"
 import { useState } from "react"
 import { useAppDispatch } from "@/store/hooks"
 import { loginAsync, clearError } from "@/store/authSlice"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent } from "@/components/ui/card"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
-import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react"
+import { Mail, Lock } from "lucide-react"
+import { 
+  Button, 
+  TextField, 
+  InputAdornment, 
+  Alert, 
+  CircularProgress, 
+  Card,
+  CardContent,
+  Box 
+} from "@mui/material"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 
 export function LoginForm() {
   const [email, setEmail] = useState("")
@@ -47,94 +54,81 @@ export function LoginForm() {
   const isPasswordActive = password.length > 0 || passwordFocused
 
   return (
-    <Card className="w-full border-0 shadow-lg">
+    <Card className="!shadow-xl !border-0">
       <CardContent className="p-6">
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email Input with Floating Label */}
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-              <Mail className={`h-5 w-5 transition-colors duration-200 ${isEmailActive ? 'text-primary' : 'text-gray-400'}`} />
-            </div>
-            <Input
+        <form onSubmit={handleSubmit}>
+          <Box className="space-y-4">
+            <TextField
               id="email"
               type="email"
+              label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onFocus={() => setEmailFocused(true)}
               onBlur={() => setEmailFocused(false)}
-              className="pl-10 pr-4 h-14 pt-6 pb-2 transition-all"
               required
+              fullWidth
+              variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Mail className="h-5 w-5 text-gray-400" />
+                  </InputAdornment>
+                ),
+              }}
             />
-            <Label 
-              htmlFor="email"
-              className={`absolute left-10 pointer-events-none transition-all duration-300 ease-in-out ${
-                isEmailActive 
-                  ? 'top-2 text-xs text-primary font-semibold scale-100' 
-                  : 'top-4 text-sm text-gray-500 scale-100'
-              }`}
-            >
-              Email
-            </Label>
-          </div>
 
-          {/* Password Input with Floating Label */}
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-              <Lock className={`h-5 w-5 transition-colors duration-200 ${isPasswordActive ? 'text-primary' : 'text-gray-400'}`} />
-            </div>
-            <Input
+            <TextField
               id="password"
               type={showPassword ? "text" : "password"}
+              label="Senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onFocus={() => setPasswordFocused(true)}
               onBlur={() => setPasswordFocused(false)}
-              className="pl-10 pr-12 h-14 pt-6 pb-2 transition-all"
               required
+              fullWidth
+              variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock className="h-5 w-5 text-gray-400" />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Button
+                      onClick={() => setShowPassword(!showPassword)}
+                      size="small"
+                      className="min-w-0"
+                      disableElevation
+                      disableRipple
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </Button>
+                  </InputAdornment>
+                ),
+              }}
             />
-            <Label 
-              htmlFor="password"
-              className={`absolute left-10 pointer-events-none transition-all duration-300 ease-in-out ${
-                isPasswordActive 
-                  ? 'top-2 text-xs text-primary font-semibold scale-100' 
-                  : 'top-4 text-sm text-gray-500 scale-100'
-              }`}
-            >
-              Senha
-            </Label>
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              {showPassword ? (
-                <EyeOff className="h-5 w-5" />
-              ) : (
-                <Eye className="h-5 w-5" />
-              )}
-            </button>
-          </div>
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3 animate-in slide-in-from-top-2">
-              <p className="text-sm text-red-600">{error}</p>
-            </div>
-          )}
-
-          <Button 
-            type="submit" 
-            className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg shadow-sm transition-all" 
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Entrando...
-              </>
-            ) : (
-              "Entrar"
+            {error && (
+              <Alert severity="error" className="animate-in slide-in-from-top-2">
+                {error}
+              </Alert>
             )}
-          </Button>
+
+            <Button 
+              type="submit" 
+              variant="contained" 
+              color="primary" 
+              fullWidth
+              disabled={isLoading}
+              sx={{ height: 44 }}
+              startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : null}
+            >
+              {isLoading ? "Entrando..." : "Entrar"}
+            </Button>
+          </Box>
         </form>
       </CardContent>
     </Card>

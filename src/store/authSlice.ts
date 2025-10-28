@@ -19,11 +19,13 @@ const authSlice = createSlice({
     setCredentials: (state, action: PayloadAction<AuthResponse>) => {
       state.user = action.payload.user;
       state.token = action.payload.access_token;
+      state.refreshToken = action.payload.refresh_token;
       state.isAuthenticated = true;
       state.error = null;
       
-      // Salvar no localStorage
-      localStorage.setItem("token", action.payload.access_token);
+      // Salvar no localStorage com prefixo Bearer
+      localStorage.setItem("token", "Bearer " + action.payload.access_token);
+      localStorage.setItem("refreshToken", action.payload.refresh_token);
     },
     
     setRefreshToken: (state, action: PayloadAction<string>) => {
@@ -68,9 +70,11 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.user;
         state.token = action.payload.access_token;
+        state.refreshToken = action.payload.refresh_token;
         state.isAuthenticated = true;
         state.error = null;
-        localStorage.setItem("token", action.payload.access_token);
+        localStorage.setItem("token", "Bearer " + action.payload.access_token);
+        localStorage.setItem("refreshToken", action.payload.refresh_token);
       })
       .addCase(loginAsync.rejected, (state, action) => {
         state.isLoading = false;
@@ -85,9 +89,11 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.user;
         state.token = action.payload.access_token;
+        state.refreshToken = action.payload.refresh_token;
         state.isAuthenticated = true;
         state.error = null;
-        localStorage.setItem("token", action.payload.access_token);
+        localStorage.setItem("token", "Bearer " + action.payload.access_token);
+        localStorage.setItem("refreshToken", action.payload.refresh_token);
       })
       .addCase(registerAsync.rejected, (state, action) => {
         state.isLoading = false;
