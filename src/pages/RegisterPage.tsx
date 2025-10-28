@@ -1,12 +1,12 @@
 import { RegisterForm } from "@/components/auth/register-form"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
-import { useAuth } from "@/lib/auth"
+import { useAuth } from "@/hooks/useAuth"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 
 export default function RegisterPage() {
-  const isAuthenticated = useAuth((state) => state.isAuthenticated)
+  const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => {

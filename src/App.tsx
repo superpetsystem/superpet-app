@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from '@/components/theme-provider'
-import { Toaster } from '@/components/ui/toaster'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 // Pages
 import HomePage from '@/pages/HomePage'
@@ -20,11 +20,10 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/register-company" element={<RegisterCompanyPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/agendar" element={<AgendarPage />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+          <Route path="/agendar" element={<ProtectedRoute><AgendarPage /></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute><AdminPage /></ProtectedRoute>} />
         </Routes>
-        <Toaster />
       </div>
     </ThemeProvider>
   )

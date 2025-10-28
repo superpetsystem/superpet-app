@@ -10,11 +10,13 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, ArrowLeft, Check } from "lucide-react"
 import { addCompany } from "@/lib/data"
-import { useAuth } from "@/lib/auth"
+import { useAppDispatch } from "@/store/hooks"
+import { loginAsync } from "@/store/authSlice"
+import { toast } from "sonner"
 
 export default function RegisterCompanyPage() {
   const navigate = useNavigate()
-  const { login } = useAuth()
+  const dispatch = useAppDispatch()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
@@ -99,9 +101,13 @@ export default function RegisterCompanyPage() {
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       // Auto-login the new admin
-      const loginSuccess = await login(adminData.email, adminData.password)
+      const result = await dispatch(loginAsync({ 
+        email: adminData.email, 
+        password: adminData.password 
+      }))
 
-      if (loginSuccess) {
+      if (loginAsync.fulfilled.match(result)) {
+        toast.success("Empresa criada e login realizado com sucesso!")
         navigate("/admin")
       } else {
         setError("Erro ao fazer login. Por favor, tente novamente.")

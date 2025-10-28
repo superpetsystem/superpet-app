@@ -1,12 +1,14 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useAuth } from "@/lib/auth"
+import { useAppDispatch } from "@/store/hooks"
+import { registerAsync } from "@/store/authSlice"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 
 export function RegisterForm() {
   const [name, setName] = useState("")
@@ -16,7 +18,7 @@ export function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const register = useAuth((state) => state.register)
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,15 +37,20 @@ export function RegisterForm() {
 
     setIsLoading(true)
 
-    const success = await register(name, email, phone, password)
-
-    if (success) {
-      navigate("/dashboard")
-    } else {
-      setError("Este email já está cadastrado")
+    try {
+      const result = await dispatch(registerAsync({ name, email, password }))
+      
+      if (registerAsync.fulfilled.match(result)) {
+        toast.success("Cadastro realizado com sucesso!")
+        navigate("/dashboard")
+      } else if (registerAsync.rejected.match(result)) {
+        setError(result.payload as string || "Erro ao cadastrar")
+      }
+    } catch (err) {
+      setError("Erro ao cadastrar")
+    } finally {
+      setIsLoading(false)
     }
-
-    setIsLoading(false)
   }
 
   return (
