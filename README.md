@@ -1,73 +1,150 @@
-# React + TypeScript + Vite
+# Super Pet - React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sistema de agendamento para pet shops com funcionalidades completas de autenticação, agendamento e gestão.
 
-Currently, two official plugins are available:
+## 🚀 Tecnologias
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 18** - Biblioteca para interfaces de usuário
+- **Vite** - Build tool e servidor de desenvolvimento
+- **TypeScript** - Tipagem estática
+- **React Router** - Roteamento client-side
+- **Tailwind CSS** - Framework CSS utilitário
+- **Radix UI** - Componentes acessíveis
+- **Lucide React** - Ícones
+- **Zustand** - Gerenciamento de estado
+- **Date-fns** - Manipulação de datas
 
-## React Compiler
+## 📁 Estrutura do Projeto
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── components/          # Componentes reutilizáveis
+│   ├── auth/           # Formulários de autenticação
+│   ├── ui/             # Componentes de interface
+│   ├── header.tsx      # Cabeçalho da aplicação
+│   └── theme-provider.tsx
+├── pages/              # Páginas da aplicação
+│   ├── HomePage.tsx
+│   ├── LoginPage.tsx
+│   ├── RegisterPage.tsx
+│   ├── RegisterCompanyPage.tsx
+│   ├── DashboardPage.tsx
+│   ├── AgendarPage.tsx
+│   └── AdminPage.tsx
+├── hooks/              # Hooks customizados
+├── lib/                # Utilitários e configurações
+├── styles/             # Estilos globais
+└── App.tsx             # Componente principal
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Instalação e Execução
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Pré-requisitos
+- Node.js 18+ 
+- npm ou yarn
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Instalação
+```bash
+npm install
 ```
+
+### Desenvolvimento
+```bash
+npm run dev
+```
+A aplicação estará disponível em `http://localhost:3000`
+
+### Build para Produção
+```bash
+npm run build
+```
+
+### Preview da Build
+```bash
+npm run preview
+```
+
+## 🔧 Scripts Disponíveis
+
+- `npm run dev` - Inicia o servidor de desenvolvimento
+- `npm run build` - Gera build de produção
+- `npm run preview` - Preview da build de produção
+- `npm run lint` - Executa o linter
+
+## 📋 Funcionalidades
+
+### Para Clientes
+- ✅ Cadastro e login
+- ✅ Agendamento de serviços
+- ✅ Visualização de agendamentos
+- ✅ Cancelamento de agendamentos
+- ✅ Dashboard pessoal
+
+### Para Administradores
+- ✅ Painel administrativo
+- ✅ Gestão de agendamentos
+- ✅ Visualização de estatísticas
+- ✅ Gestão de serviços e equipe
+
+### Para Empresas
+- ✅ Cadastro de empresa
+- ✅ Configuração de serviços
+- ✅ Gestão de profissionais
+- ✅ Relatórios e análises
+
+## 🎨 Design System
+
+O projeto utiliza um design system baseado em:
+- **Tailwind CSS** para estilização
+- **Radix UI** para componentes acessíveis
+- **Lucide React** para ícones
+- **CSS Variables** para temas
+
+## 🔐 Autenticação
+
+O sistema inclui diferentes tipos de usuários:
+- **Cliente** - Pode agendar serviços
+- **Admin da Empresa** - Gerencia uma empresa específica
+- **Super Admin** - Acesso total ao sistema
+
+### Credenciais de Teste
+- Admin: `admin@superpet.com` / `admin123`
+- Cliente: `joao@email.com` / `123456`
+
+## 📱 Responsividade
+
+A aplicação é totalmente responsiva e funciona em:
+- 📱 Dispositivos móveis
+- 💻 Tablets
+- 🖥️ Desktops
+
+## 🚀 Deploy
+
+Para fazer deploy da aplicação:
+
+1. Execute `npm run build`
+2. Os arquivos estáticos estarão na pasta `dist/`
+3. Faça upload dos arquivos para seu servidor web
+
+## 📝 Notas da Migração
+
+Esta aplicação foi migrada de Next.js para React + Vite. As principais mudanças incluem:
+
+- ✅ Substituição do roteamento do Next.js pelo React Router
+- ✅ Migração de `useRouter` para `useNavigate`
+- ✅ Atualização de imports de `next/link` para `react-router-dom`
+- ✅ Configuração do Vite com TypeScript
+- ✅ Adaptação do sistema de temas
+- ✅ Configuração do Tailwind CSS para Vite
+
+## 🤝 Contribuição
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
