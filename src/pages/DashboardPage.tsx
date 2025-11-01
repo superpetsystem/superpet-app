@@ -79,9 +79,9 @@ export default function DashboardPage() {
               <CardHeader className="text-center">
                 <Avatar className="w-24 h-24 mx-auto mb-4">
                   <AvatarImage src="/placeholder.svg" />
-                  <AvatarFallback className="bg-secondary text-secondary-foreground text-2xl">
-                    {user?.name.charAt(0).toUpperCase()}
-                  </AvatarFallback>
+                    <AvatarFallback className="bg-secondary text-secondary-foreground text-2xl">
+                      {(user?.name?.charAt(0) ?? "").toUpperCase()}
+                    </AvatarFallback>
                 </Avatar>
                 <CardTitle>{user?.name}</CardTitle>
                 <CardDescription>Cliente Super Pet</CardDescription>
